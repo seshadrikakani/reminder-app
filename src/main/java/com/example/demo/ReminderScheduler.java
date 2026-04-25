@@ -6,7 +6,6 @@ import com.example.demo.Service.ReminderService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import javax.swing.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class ReminderScheduler {
         this.emailService = emailService;
     }
 
-    // 🔥 CRON: runs every minute (second 0)
+    // Runs every minute
     @Scheduled(cron = "0 * * * * *")
     public void checkReminders() {
 
@@ -34,12 +33,9 @@ public class ReminderScheduler {
             // 🔔 Console log
             System.out.println("🔔 REMINDER: " + r.getTitle() + " - " + r.getDescription());
 
-            // 🪟 Desktop Popup
-            showPopup(r.getTitle(), r.getDescription());
-
             // 📧 Email Notification
             emailService.sendReminder(
-                    "kakaniseshadri367@gmail.com", // 👉 replace if needed
+                    "kakaniseshadri367@gmail.com",
                     r.getTitle(),
                     r.getDescription()
             );
@@ -60,17 +56,5 @@ public class ReminderScheduler {
                 service.markDone(r);
             }
         }
-    }
-
-    // 🪟 Popup method
-    private void showPopup(String title, String message) {
-        SwingUtilities.invokeLater(() -> {
-            JOptionPane.showMessageDialog(
-                    null,
-                    message,
-                    title,
-                    JOptionPane.INFORMATION_MESSAGE
-            );
-        });
     }
 }
