@@ -20,7 +20,7 @@ public class ReminderScheduler {
         this.emailService = emailService;
     }
 
-    // Runs every minute
+    // ⏰ Runs every minute
     @Scheduled(cron = "0 * * * * *")
     public void checkReminders() {
 
@@ -30,34 +30,30 @@ public class ReminderScheduler {
 
         for (Reminder r : reminders) {
 
-            // 🔔 Console
+            // 🔔 Console log
             System.out.println("🔔 REMINDER: " + r.getTitle() + " - " + r.getDescription());
 
-            // 📧 Email
+            // 📧 Send email
             emailService.sendReminder(
                     "kakaniseshadri367@gmail.com",
                     r.getTitle(),
                     r.getDescription()
             );
 
-            // 🔁 Recurrence Logic
-            if ("DAILY".equalsIgnoreCase(r.getRecurrence())) {
+            // 🔥 CUSTOM INTERVAL LOGIC
+            if (r.getIntervalDays() != null && r.getIntervalDays() > 0) {
 
-                r.setReminderTime(r.getReminderTime().plusDays(1));
-                service.save(r);
+                // Move reminder forward by X days
+                r.setReminderTime(r.getReminderTime().plusDays(r.getIntervalDays()));
 
-            } else if ("EVERY_2_DAYS".equalsIgnoreCase(r.getRecurrence())) {
+                // Keep it active
+                r.setStatus("PENDING");
 
-                r.setReminderTime(r.getReminderTime().plusDays(2));
-                service.save(r);
-
-            } else if ("WEEKLY".equalsIgnoreCase(r.getRecurrence())) {
-
-                r.setReminderTime(r.getReminderTime().plusWeeks(1));
                 service.save(r);
 
             } else {
-                // ONE-TIME
+                // One-time reminder
+                r.setStatus("DONE");
                 service.markDone(r);
             }
         }
