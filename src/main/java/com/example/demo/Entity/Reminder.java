@@ -6,9 +6,9 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Data                // getters + setters + toString
-@NoArgsConstructor   // default constructor
-@AllArgsConstructor  // full constructor
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Reminder {
 
     @Id
@@ -21,8 +21,7 @@ public class Reminder {
 
     private LocalDateTime reminderTime;
 
-    // 🔥 Custom interval (core feature)
-    private Integer intervalDays;
+    private Integer intervalDays; // 🔥 custom interval
 
     private String status; // PENDING / DONE
 }
