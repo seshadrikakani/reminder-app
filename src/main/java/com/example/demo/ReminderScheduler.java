@@ -30,20 +30,25 @@ public class ReminderScheduler {
 
         for (Reminder r : reminders) {
 
-            // 🔔 Console log
+            // 🔔 Console
             System.out.println("🔔 REMINDER: " + r.getTitle() + " - " + r.getDescription());
 
-            // 📧 Email Notification
+            // 📧 Email
             emailService.sendReminder(
                     "kakaniseshadri367@gmail.com",
                     r.getTitle(),
                     r.getDescription()
             );
 
-            // 🔁 Recurring Logic
+            // 🔁 Recurrence Logic
             if ("DAILY".equalsIgnoreCase(r.getRecurrence())) {
 
                 r.setReminderTime(r.getReminderTime().plusDays(1));
+                service.save(r);
+
+            } else if ("EVERY_2_DAYS".equalsIgnoreCase(r.getRecurrence())) {
+
+                r.setReminderTime(r.getReminderTime().plusDays(2));
                 service.save(r);
 
             } else if ("WEEKLY".equalsIgnoreCase(r.getRecurrence())) {
@@ -52,7 +57,7 @@ public class ReminderScheduler {
                 service.save(r);
 
             } else {
-                // ONE-TIME reminder
+                // ONE-TIME
                 service.markDone(r);
             }
         }
